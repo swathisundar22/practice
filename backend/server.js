@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -7,36 +9,27 @@ const studentRoutes = require("./Routes/studentRoutes");
 const app = express();
 
 app.use(cors());
-
 app.use(express.json());
-
 
 // MongoDB Connection
 
-mongoose.connect("mongodb://127.0.0.1:27017/phase2db")
- 
-.then(() => {
-
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
     console.log("MongoDB Connected Successfully");
-
-})
-
-.catch((error) => {
-
+  })
+  .catch((error) => {
     console.log(error);
-
-});
-
+  });
 
 // Routes
 
 app.use("/api", studentRoutes);
 
-
 // Server
 
-app.listen(5000, () => {
+const PORT = process.env.PORT || 5000;
 
-    console.log("Server Running on Port 5000");
-
+app.listen(PORT, () => {
+  console.log(`Server Running on Port ${PORT}`);
 });
